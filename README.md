@@ -6,3 +6,5 @@ Cel projektu - nauka pracy na Git
 
 fdhfoidsos
 jestem ala 
+
+dzien dobry
