@@ -31,3 +31,5 @@ domek
 chleb
 
 skład zespolu to same koty z R
+
+programisci z PG
