@@ -29,3 +29,5 @@ you can check if it worked by clicking git history and looking at the tree.
 domek
 
 chleb
+
+skład zespolu to same koty z R
