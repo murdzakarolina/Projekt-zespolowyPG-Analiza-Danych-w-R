@@ -37,4 +37,4 @@ Celem projektu jest analiza danych dotyczących uzależnień od social mediów w
 
 9. Czy istnieją różnice w poziomie uzależnienia w zależności od narodowości studentów?
 
-10. Czy poziom uzależnienia od mediów społecznościowych różni się między studentami płci żeńskiej i męskiej?
+10. Czy poziom uzależnienia od mediów społecznościowych różni się między studentami płci żeńskiej i męskiej? 
