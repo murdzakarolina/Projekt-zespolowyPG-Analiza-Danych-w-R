@@ -1,0 +1,16 @@
+---
+title: "Analiza danych w R - projekt zespołowy"
+author: "Karolina Murdza, Alicja Hyży, Aleksandra Jakóbiak, Jan Freda"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::material:
+    highlight: kate
+---
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE)
+library(tidyverse)
+library(readr)
+dane <- read_csv("data/Students_Social_Media_Addiction.csv")
+```
