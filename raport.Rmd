@@ -33,4 +33,4 @@ Celem projektu jest analiza danych dotyczących uzależnień od social mediów w
 
 ###7. Czy status związku wpływa na czas spędzany w social mediach?
 
-###8. Jaki jest średni czas spędzany w social mediach w zależności od narodowości?
+###8. Jaki jest średni czas spędzany w social mediach w zależności od narodowości??
