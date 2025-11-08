@@ -14,4 +14,7 @@ library(tidyverse)
 library(readr)
 dane <- read_csv("data/Students_Social_Media_Addiction.csv")
 ```
+#Wstęp
+Celem projektu jest analiza danych dotyczących uzależnień od social mediów wśród studentów. Dane zawierają wiek, płeć, stopień wykształcenia, narodowość, najczęściej używana platforma, czas snu, zdrowie psychiczne, status związku. Analiza ma na celu zidentyfikowanie kluczowych czynników wpływających na uzależnienia. 
 
+##Pytania badawcze (każdy po 4)
