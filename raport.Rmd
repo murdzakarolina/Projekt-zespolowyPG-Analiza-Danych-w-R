@@ -43,3 +43,4 @@ Celem projektu jest analiza danych dotyczących uzależnień od social mediów w
 
 11. test pull i push nastepny test pull i push
 12. test numer dwa 
+13. test ola
