@@ -14,24 +14,41 @@ library(tidyverse)
 library(readr)
 dane <- read_csv("data/Students_Social_Media_Addiction.csv")
 ```
+
 # Wstęp
-Celem projektu jest analiza danych dotyczących uzależnień od social mediów wśród studentów. Dane zawierają wiek, płeć, stopień wykształcenia, narodowość, najczęściej używana platforma, czas snu, zdrowie psychiczne, status związku. Analiza ma a celu zidentyfikowanie kluczowych czynników wpływających na uzależnienia. 
 
-## Pytania badawcze (każdy po 4)
+Celem projektu jest analiza danych dotyczących uzależnień od social mediów wśród studentów. Dane zawierają wiek, płeć, stopień wykształcenia, narodowość, najczęściej używana platforma, czas snu, zdrowie psychiczne, status związku. Analiza ma a celu zidentyfikowanie kluczowych czynników wpływających na uzależnienia.
 
-1. Jaki jest średni czas jaki studenci spedzają dziennie na używanie social mediów?
+## Pytania badawcze
 
-2. Jaka jest najczęściej używana przez studentów platforma?
+1.  Jaki jest średni czas jaki studenci spedzają dziennie na używanie social mediów?
 
+<<<<<<< HEAD
 3. Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
+=======
+2.  Jaka jest najczęściej używana przez studentów platforma?
+>>>>>>> 2090e772d246b1990e026e1cb29c0687d5476f79
 
-4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media?
+3.  Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
 
-5. Jakie platformy społecznościowe najczęściej powodują objawy uzależnienia wśród studentów?
+4.  Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media?
 
-6. Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
+5.  Jakie platformy społecznościowe najczęściej powodują objawy uzależnienia wśród studentów?
 
-7. Czy status związku wpływa na czas spędzany w social mediach?
+6.  Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
 
+7.  Czy status związku wpływa na czas spędzany w social mediach?
+
+8.  Jaki jest średni czas spędzany w social mediach w zależności od narodowości?
+
+9. Czy istnieją różnice w poziomie uzależnienia w zależności od narodowości studentów?
+
+10. Czy poziom uzależnienia od mediów społecznościowych różni się między studentami płci żeńskiej i męskiej? 
+
+11. kotyy
+
+<<<<<<< HEAD
 8. Jaki jest średni czas spędzany w social mediach w zależności od narodowości?
 
+=======
+>>>>>>> 2090e772d246b1990e026e1cb29c0687d5476f79
