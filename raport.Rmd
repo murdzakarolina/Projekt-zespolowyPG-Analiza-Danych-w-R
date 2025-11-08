@@ -22,4 +22,3 @@ Celem projektu jest analiza danych dotyczących uzależnień od social mediów w
 2. Jaka jest najczęściej używana przez studentów platforma?
 3. Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
 4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media?
-
