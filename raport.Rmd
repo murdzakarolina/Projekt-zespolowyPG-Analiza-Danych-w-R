@@ -41,4 +41,4 @@ Celem projektu jest analiza danych dotyczących uzależnień od social mediów w
 
 10. Czy poziom uzależnienia od mediów społecznościowych różni się między studentami płci żeńskiej i męskiej? 
 
-11. test pull i push
+11. test pull i push nastepny test pull i push
