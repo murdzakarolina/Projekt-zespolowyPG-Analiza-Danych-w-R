@@ -18,3 +18,8 @@ dane <- read_csv("data/Students_Social_Media_Addiction.csv")
 Celem projektu jest analiza danych dotyczących uzależnień od social mediów wśród studentów. Dane zawierają wiek, płeć, stopień wykształcenia, narodowość, najczęściej używana platforma, czas snu, zdrowie psychiczne, status związku. Analiza ma na celu zidentyfikowanie kluczowych czynników wpływających na uzależnienia. 
 
 ##Pytania badawcze (każdy po 4)
+1. Jaki jest średni czas jaki studenci spedzają dziennie na używanie social mediów?
+2. Jaka jest najczęściej używana przez studentów platforma?
+3. Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
+4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media?
+
