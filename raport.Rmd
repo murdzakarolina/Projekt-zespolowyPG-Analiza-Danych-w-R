@@ -12,12 +12,14 @@ output:
 knitr::opts_chunk$set(cache = TRUE)
 library(tidyverse)
 library(readr)
-dane <- read_csv("data/Students_Social_Media_Addiction.csv")
+dane <- read.csv("data/Students_Social_Media_Addiction.csv")
 ```
 
 # Wstęp
 
-Celem projektu jest analiza danych dotyczących uzależnień od social mediów wśród studentów. Dane zawierają wiek, płeć, stopień wykształcenia, narodowość, najczęściej używana platforma, czas snu, zdrowie psychiczne, status związku. Analiza ma a celu zidentyfikowanie kluczowych czynników wpływających na uzależnienia.
+Celem projektu jest analiza danych dotyczących uzależnień od social mediów wśród studentów. Dane zawierają wiek, płeć, stopień wykształcenia, narodowość, najczęściej używana platforma, czas snu, zdrowie psychiczne, status związku. Głównym celem jest zbadanie, w jaki sposób korzystanie z mediów społecznościowych wpływa na uczniów:
+1.	Wyniki w nauce
+2.	Jakość snu
 
 ## Pytania badawcze
 
@@ -41,6 +43,32 @@ Celem projektu jest analiza danych dotyczących uzależnień od social mediów w
 
 10. Czy poziom uzależnienia od mediów społecznościowych różni się między studentami płci żeńskiej i męskiej? 
 
-11. test pull i push nastepny test pull i push
-12. test numer dwa 
-13. test ola
+### Opis danych 
+
+Zbiór danych "Students_Social_Media_Addiction.csv" zawiera informacje o `r nrow(dane)` obserwacji i `r ncol(dane)` zmiennych.
+
+Poniżej znajduje się opis najważniejszych zmiennych w zbiorze danych:
+
+- `Age`: Wiek studenta (od 19 do 24 lat)
+
+- `Gender`: Płeć studenta (Mężczyzna/Kobieta)
+
+- `Academic_level`: Poziom wykształcenia (Średnie/Licencjat/Magister)
+
+- `Country`: Narodowość studenta
+
+- `Avg_Daily_Usage_Hours`: Średni dzienny czas spędzany na mediach społecznościowych (w godzinach - wartości od 1,5 do 8,5)
+
+- `Most_Used_Platform`: Najczęściej używana platforma mediów społecznościowych (Facebook, Instagram, Twitter, TikTok, Snapchat, Inne)
+
+- `Affects_Academic_Performance`: Wpływ na wyniki w nauce (Tak/Nie)
+
+- `Sleep_Hours_Per_Night`: Liczba godzin snu na dobę (od 3,8 do 9,6 godzin)
+
+- `Mental_Health_Score`: Wynik zdrowia psychicznego (skala od 1 do 10)
+
+- `Relationship_Status`: Status związku (Single/In a relationship/Complicated)
+
+- `Conflicts_Over_Social_Media`: Konflikty związane z używaniem mediów społecznościowych (skala od 1 do 5)
+
+- `Addicted_Score`: Wynik uzależnienia od mediów społecznościowych (skala od 1 do 10) 
