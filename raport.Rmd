@@ -76,19 +76,27 @@ Poniżej znajduje się opis najważniejszych zmiennych w zbiorze danych:
 
 2.1 Analiza braków danych
 
-dane <- read.csv("data/Students_Social_Media_Addiction.csv")
 ```{r}
 procent <- prop_complete_var(dane) * 100
 ```
 
 W danych znajduje się `r procent` % kompletnych wartości.
 
-dane <- read.csv("data/Students_Social_Media_Addiction.csv")
 ```{r}
 naniar::vis_miss(dane)
 ```
 
-VIM::aggr(oceanbuoys, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(oceanbuoys), cex.axis=.7, gap=3, ylab=c("Procent braków danych","Wzorzec braków danych"))
+
+
+
+
+
+
+
+
+
+
+VIM::aggr(dane, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(dane), cex.axis=.7, gap=3, ylab=c("Procent braków danych","Wzorzec braków danych"))
 
 
 ```{r}
@@ -96,5 +104,7 @@ library(ggplot2)
 ggplot(data =dane) + 
   geom_miss_point(aes(x = Avg_Daily_Usage_Hours, y = Sleep_Hours_Per_Night), color = 'blue', size = 2) +
 ```
+
+
 
 
