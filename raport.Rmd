@@ -97,3 +97,4 @@ ggplot(data =dane) +
   geom_miss_point(aes(x = Avg_Daily_Usage_Hours, y = Sleep_Hours_Per_Night), color = 'blue', size = 2) +
 ```
 
+
