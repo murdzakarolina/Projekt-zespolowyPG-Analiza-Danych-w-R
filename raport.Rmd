@@ -206,3 +206,7 @@ ggplot(dane, aes(x = Sleep_Hours_Per_Night, y = Avg_Daily_Usage_Hours)) +
 ```
 
 Średnia czasu spędzanego na platforach social media jest odwrotnie proporcjonalna do średniego czasu snu 
+
+
+
+
