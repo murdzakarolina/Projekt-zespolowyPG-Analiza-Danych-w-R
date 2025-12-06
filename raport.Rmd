@@ -199,14 +199,28 @@ rules
 Sprawdzamy pytanie 4.Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media? 
 
 ```{r}
+#4.  Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media i czy wpływa to na wynik akademicki? 
+
+#wykres kropkowy z linią trendu 
+  
 library(ggplot2)
-ggplot(dane, aes(x = Sleep_Hours_Per_Night, y = Avg_Daily_Usage_Hours)) +
+dane <- read.csv("data/Students_Social_Media_Addiction.csv")
+ggplot(dane, aes(x = Sleep_Hours_Per_Night, y = Avg_Daily_Usage_Hours, color = Affects_Academic_Performance)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE)  #linia trendu 
+  geom_smooth(method = "lm", se = FALSE)  # linia trendu
+
+#wykres boxplotowy z podziałem na kategorie wg sredniej czasu spedzanego na social mediach 
+
+dane$Avg_Daily_Usage_Hours <- as.numeric(dane$Avg_Daily_Usage_Hours)
+dane$social_media_avg <- cut(dane$Avg_Daily_Usage_Hours, breaks = c(0,2,4,6,8,10, Inf), labels = c("0-2", "2-4", "4-6", "6-8", "8-10", "wiecej niz 10"))
+ggplot(dane, aes(y = Sleep_Hours_Per_Night, x = social_media_avg)) + 
+  geom_boxplot()
 ```
 
-Średnia czasu spędzanego na platforach social media jest odwrotnie proporcjonalna do średniego czasu snu 
+Średnia czasu spędzanego na platforach social media jest odwrotnie proporcjonalna do średniego czasu snu. 
+Na podstawie pierwszego wykresu można zauważyć, że osoby, na których wyniki akademickie wpływa czas spędzony na social mediach śpią średnio krócej i spędzają więcej czasu na platformach społecznościowych. 
 
+Na podstawie drugiego wykresu można zauważyć ujemną korelację średniej czasu snu ze średnią czasu spędzonego w social mediach. 
 
 
 
