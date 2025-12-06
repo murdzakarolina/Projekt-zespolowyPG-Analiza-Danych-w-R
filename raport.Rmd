@@ -194,3 +194,15 @@ rules
 
 ```
 
+# 3. Wizualizacja danych 
+
+Sprawdzamy pytanie 4.Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media? 
+
+```{r}
+library(ggplot2)
+ggplot(dane, aes(x = Sleep_Hours_Per_Night, y = Avg_Daily_Usage_Hours)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)  #linia trendu 
+```
+
+Średnia czasu spędzanego na platforach social media jest odwrotnie proporcjonalna do średniego czasu snu 
