@@ -50,25 +50,25 @@ Zbiór danych "Students_Social_Media_Addiction.csv" zawiera informacje o `r nrow
 
 Poniżej znajduje się opis najważniejszych zmiennych w zbiorze danych:
 
-- `Age`: Wiek studenta (od 19 do 24 lat)
+- `Age`: Wiek studenta (od 16 do 100 lat)
 
-- `Gender`: Płeć studenta (Mężczyzna/Kobieta)
+- `Gender`: Płeć studenta (Mężczyzna/Kobieta) 
 
-- `Academic_level`: Poziom wykształcenia (Średnie/Licencjat/Magister)
+- `Academic_level`: Poziom wykształcenia (Średnie/W trakcie studiów/Studia wyższe)
 
 - `Country`: Narodowość studenta
 
-- `Avg_Daily_Usage_Hours`: Średni dzienny czas spędzany na mediach społecznościowych (w godzinach - wartości od 1,5 do 8,5)
+- `Avg_Daily_Usage_Hours`: Średni dzienny czas spędzany na mediach społecznościowych (w godzinach - wartości od 0 do 24)
 
 - `Most_Used_Platform`: Najczęściej używana platforma mediów społecznościowych (Facebook, Instagram, Twitter, TikTok, Snapchat, Inne)
 
 - `Affects_Academic_Performance`: Wpływ na wyniki w nauce (Tak/Nie)
 
-- `Sleep_Hours_Per_Night`: Liczba godzin snu na dobę (od 3,8 do 9,6 godzin)
+- `Sleep_Hours_Per_Night`: Liczba godzin snu na dobę (od 0 do 24 godzin)
 
 - `Mental_Health_Score`: Wynik zdrowia psychicznego (skala od 1 do 10)
 
-- `Relationship_Status`: Status związku (Single/In a relationship/Complicated)
+- `Relationship_Status`: Status związku (Singiel/W związku/To skomplikowane)
 
 - `Conflicts_Over_Social_Media`: Konflikty związane z używaniem mediów społecznościowych (skala od 1 do 5)
 
@@ -123,13 +123,6 @@ naniar::vis_miss(Dane_imp)
 
 ## Reguły 
 
-```{r}
-data(dane)
-head(dane [3,7],3)
-# dodajemy ID
-dane$rec_id <- sprintf("ID%03d", 1:nrow(dane))
-```
-
 Reguły, które muszą spełnić nasze dane:
 
 1. Wiek studentów mieści się w przedziale <16, 100>
@@ -167,39 +160,40 @@ rules <- validator(
 
 ```
 
-Czy zbiór danych spełnia te reguły?
+Czy zbiór danych spełnia te reguły? 
+Upewniamy się za pomocą funkcji confront
 
 ```{r}
-cf <- confront(dane, rules, key="rec_id")
+cf <- confront(dane, rules, key="Student_ID")
 summary(cf)
 plot(cf, main="dane")
-#as.data.frame(cf) %>% head()
+
 ```
 
-W naszym zbiorze danych nie ma żadnego konfliktu danych; 100% reguł jest spełnione 
-##  Zarądzenie regułami
-
-**Problem**
-
-W miarę rozwoju projektu, liczba reguł walidacyjnych może znacznie wzrosnąć, co utrudnia ich zarządzanie i utrzymanie. Ręczne dodawanie, modyfikowanie lub usuwanie reguł staje się czasochłonne i podatne na błędy.
-
-**Pomysły**
-
-Aurtomatyzacja zarządzania regułami walidacyjnymi może znacznie usprawnić proces walidacji danych.
+W naszym zbiorze danych nie ma żadnego konfliktu; 100% reguł jest spełnione, teraz sprawdzamy kompletność danych z pakietem vis_miss   
 
 ```{r}
-
-
-rules
-
+vis_miss(dane) 
+vis_miss(dane, cluster = TRUE) #Wizualizujemy z grupowaniem kolumn i wierszy o podobnym wzorcu braków
+n_miss(dane) #Sprawdzamy liczbę braków w całym zbiorze
+prop_miss(dane) #Sprawdzamy procent braków w całym zbiorze
+miss_var_summary(dane)
 ```
+Dane są kompletne – brak wartości brakujących (NA) w żadnej kolumnie. 
+Możemy przejść do wizualizacji danych.
 
 # 3. Wizualizacja danych 
 
-Sprawdzamy pytanie 4.Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media? 
+Celem naszego projektu jest zbadanie uzależnienia od korzystania z mediów 
+społecznościowych wśród studentów. Postanowiliśmy zbadać korelację czasu spędzanego 
+w social mediach ze średnim czasem snu, czy uzależnienie od mediów społecznościowych zależy 
+od poziomu wykształcenia oraz sprawdzić jak wygląda uzależnienie od mediów społecznościowych 
+w zależności od krajów. 
+
+3.1 Sprawdzamy jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media? 
 
 ```{r}
-#4.  Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media i czy wpływa to na wynik akademicki? 
+#4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media i czy wpływa to na wynik akademicki? 
 
 #wykres kropkowy z linią trendu 
   
@@ -207,14 +201,22 @@ library(ggplot2)
 dane <- read.csv("data/Students_Social_Media_Addiction.csv")
 ggplot(dane, aes(x = Sleep_Hours_Per_Night, y = Avg_Daily_Usage_Hours, color = Affects_Academic_Performance)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE)  # linia trendu
+  geom_smooth(method = "lm", se = FALSE) +                   
+  labs(
+    title = "Średni czas korzystania z mediów społecznościowych a średni czas snu",
+    y = "Średni czas snu", 
+    x = "Średni czas spędzony w mediach społecznościowych")
 
 #wykres boxplotowy z podziałem na kategorie wg sredniej czasu spedzanego na social mediach 
 
 dane$Avg_Daily_Usage_Hours <- as.numeric(dane$Avg_Daily_Usage_Hours)
 dane$social_media_avg <- cut(dane$Avg_Daily_Usage_Hours, breaks = c(0,2,4,6,8,10, Inf), labels = c("0-2", "2-4", "4-6", "6-8", "8-10", "wiecej niz 10"))
 ggplot(dane, aes(y = Sleep_Hours_Per_Night, x = social_media_avg)) + 
-  geom_boxplot()
+  geom_boxplot() +                   
+  labs(
+    title = "Średni czas korzystania z mediów społecznościowych a średni czas snu",
+    y = "średni czas snu", 
+    x = "średni czas spędzany w mediach społecznościowych")
 ```
 
 Średnia czasu spędzanego na platforach social media jest odwrotnie proporcjonalna do średniego czasu snu. 
@@ -222,5 +224,67 @@ Na podstawie pierwszego wykresu można zauważyć, że osoby, na których wyniki
 
 Na podstawie drugiego wykresu można zauważyć ujemną korelację średniej czasu snu ze średnią czasu spędzonego w social mediach. 
 
+3.2 Sprawdzamy czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
 
+```{r}
+#6. Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
 
+ggplot(dane, aes( y = social_media_avg, fill = Academic_Level)) +
+geom_bar()  +                   
+  labs(
+    title = "Średni czas korzystania z mediów społecznościowych według wykształcenia",
+    y = "Średni dzienne użycie mediów (godz.)", 
+    x = "liczba obserwacji"
+  )  +
+  labs(title = "Średni czas korzystania z mediów społecznościowych według wykształcenia",
+      fill = "Poziom wykształcenia") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 10)
+  )
+
+```
+Na podstawie powyższego wykresu można stwierdzić, że średni czas korzystania z mediów społecznościowych zależy w nieznaczym stopniu od wykształcenia. Wśród grupy, która spędza od 0 do 2 godzin w social media są jedynie absolwenci szkół wyższych a wśród grupy, która spędza od 8 do 10 godzin dziennie na platformach social media są wyłącznie osoby, które nie ukończyły jeszcze studiów. Osoby z wykształceniem średnim najczęściej spędzają od 4 do 6 godzin dziennie w mediach społecznościowych. 
+
+3.3 Sprawdzamy jaki jest średni czas spędzany w social mediach w zależności od narodowości?
+
+```{r}
+#8. Jaki jest średni czas spędzany w social mediach w zależności od narodowości?
+
+library(maps)
+world <- map_data("world") 
+avg_by_country <- dane %>%
+  group_by(Country) %>%
+  summarise(mean_hours = mean(Avg_Daily_Usage_Hours, na.rm = TRUE))
+world_data <- left_join(world, avg_by_country, by = c("region" = "Country"))
+head(avg_by_country)
+ggplot(world_data, aes(x = long, y = lat, group = group, fill = mean_hours)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  labs(title = "Średni czas spędzany w social mediach według narodowości",
+       fill = "liczba godzin 
+spędzanych
+w social mediach") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 10)
+  )
+
+```
+
+3.4 Sprawdzamy czy zdrowie psychiczne zależy od czasu spędzonego w mediach społecznościowych 
+
+```{r}
+ggplot(dane, aes(x = social_media_avg, y = Mental_Health_Score)) +
+  geom_boxplot()  +
+  labs(
+    title = "Zależność między czasem w mediach społecznościowych a zdrowiem psychicznym",
+    x = "Czas w mediach społecznościowych",
+    y = "Zdrowie psychiczne (0–10)"
+  )
+
+```
+Na podstawie powyższego wykresu można stwierdzić, że istnieje negatywna korelacja między czasem spędzonym w mediach społecznościowych a zdrowiem psychicznym, przy czym najlepszy wynik zdrowia psychicznego wydaje się być w przedziale "0–2" godziny. Wzrost czasu spędzanego na platformach społecznościowych (z 2 do 8 godzin) wiąże się ze stopniowym pogorszeniem zdrowia psychicznego.Wykres sugeruje, że umiarkowane lub wysokie wykorzystanie mediów społecznościowych (od 2 do 8 godzin) jest związane zarówno z gorszym średnim zdrowiem psychicznym, jak i większą niepewnością wyników w tej grupie.
