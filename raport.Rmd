@@ -121,14 +121,6 @@ naniar::vis_miss(Dane_imp)
 
 > Walidacja danych to proces sprawdzania poprawności, kompletności i spójności danych w celu zapewnienia ich jakości i wiarygodności. Polega na identyfikacji i eliminacji błędów, nieścisłości oraz braków danych, co pozwala na uzyskanie rzetelnych wyników analizy.
 
-**Przykłady**
-
-- Sprawdzanie zakresu wartości: Upewnienie się, że wartości liczbowe mieszczą się w określonym zakresie (np. wiek powinien być większy niż 15 i mniejszy niż 50).
-
-- Sprawdzanie typów danych: Upewnienie się, że dane są w odpowiednim formacie (np. daty powinny być w formacie "YYYY-MM-DD").
-
--Tu coś jeszcze trzeba dopisac - kreatywnosc zostawiam wam (powinno byc 4 myslniki)
-
 ## Reguły 
 
 ```{r}
@@ -138,27 +130,53 @@ head(dane [3,7],3)
 dane$rec_id <- sprintf("ID%03d", 1:nrow(dane))
 ```
 
-Zdefiniujmy szereg reguł, które muszą spełniać nasze dane *musimy podmienic na nasze, zgodnie z regułami wyzej
+Reguły, które muszą spełnić nasze dane:
+
+1. Wiek studentów mieści się w przedziale <16, 100>
+2. Średni czas spędzany na platformach social media mieści się w przedziale <0, 24>
+3. Średni czas snu na dobę mieści się w przedziale <0, 24>
+4. Wynik zdrowia psychicznego mieści się w przedziale <0,10>
+5. Wynik uzależnienia mieści się w przedziale <0,10>
+6. Płeć to "Female", "Male" lub "Other"
+7. Poziom wykształcenia to "Undergraduate", "Graduate", "High School"
+8. Najczęściej używane platfomy to : "Instagram", "Facebook", "TikTok", "Snapchat", "LinkedIn", "LINE", "KakaoTalk", "Twitter", "VKontakte", "WeChat", "WhatsApp", "YouTube"
+9. Status relacji to "Single", "In Relationship", "Complicated"
+10. Wynik wpływu na wyniki akademickie to "Yes" lub "No"
+11. Wynik konfliktu z social mediami to "0", "1", "2", "3", "4", "5"
 
 ```{r}
+library(validate)
+
+table(dane$Most_Used_Platform)
+table(dane$Relationship_Status)
+table(dane$Academic_Level)
+
 rules <- validator(
-  turnover + other.rev == total.rev,
-  , turnover >= 0
-  , other.rev >= 0
-  , total.rev >= 0
-  , if (staff > 0) staff.costs > 0
+  Age >= 16 & Age <= 100,
+  Avg_Daily_Usage_Hours >= 0 & Avg_Daily_Usage_Hours <= 24,
+  Sleep_Hours_Per_Night >= 0 & Sleep_Hours_Per_Night <= 24,
+  Mental_Health_Score >= 0 & Mental_Health_Score <= 10,
+  Addicted_Score >= 0 & Addicted_Score <= 10,
+  Gender %in% c("Male", "Female", "Other"),
+  Academic_Level %in% c("Undergraduate", "Graduate", "High School"),
+  Most_Used_Platform %in% c("Instagram", "Facebook", "TikTok", "Snapchat", "LinkedIn", "LINE", "KakaoTalk", "Twitter", "VKontakte", "WeChat", "WhatsApp", "YouTube"),
+  Relationship_Status %in% c("Single", "In Relationship", "Complicated"),
+  Affects_Academic_Performance %in% c("Yes", "No"),
+  Conflicts_Over_Social_Media %in% c("0", "1", "2", "3", "4", "5")
 )
+
 ```
 
-Czy zbiór danych spełnia te reguły? (tez podmienic na nasze)
+Czy zbiór danych spełnia te reguły?
 
 ```{r}
 cf <- confront(dane, rules, key="rec_id")
 summary(cf)
-barplot(cf, main="dane")
+plot(cf, main="dane")
 #as.data.frame(cf) %>% head()
 ```
 
+W naszym zbiorze danych nie ma żadnego konfliktu danych; 100% reguł jest spełnione 
 ##  Zarądzenie regułami
 
 **Problem**
@@ -174,6 +192,5 @@ Aurtomatyzacja zarządzania regułami walidacyjnymi może znacznie usprawnić pr
 
 rules
 
-rules <- simpfy_rules(rules)
 ```
 
