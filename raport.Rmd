@@ -312,10 +312,10 @@ statystyki <- dane %>%
     "Kwartyl górny" = quantile(Avg_Daily_Usage_Hours, 0.75, na.rm = TRUE),
     "Średnia" = mean(Avg_Daily_Usage_Hours, na.rm = TRUE),
     "Odch. std." = sd(Avg_Daily_Usage_Hours, na.rm = TRUE),
-    IQR = iqr(Avg_Daily_Usage_Hours, na.rm = TRUE),
-    "Odchylenie ćwiartkowe" = iqr(Avg_Daily_Usage_Hours, na.rm = TRUE)/2,
+    IQR = IQR(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    "Odchylenie ćwiartkowe" = IQR(Avg_Daily_Usage_Hours, na.rm = TRUE)/2,
     "Odch. std. w %" = (sd(Avg_Daily_Usage_Hours, na.rm = TRUE)/mean(Avg_Daily_Usage_Hours, na.rm = TRUE))*100,
-    "Odch. ćwiartkowe w %" = (iqr(Avg_Daily_Usage_Hours, na.rm = TRUE)/median(Avg_Daily_Usage_Hours, na.rm = TRUE))*100,
+    "Odch. ćwiartkowe w %" = (IQR(Avg_Daily_Usage_Hours, na.rm = TRUE)/median(Avg_Daily_Usage_Hours, na.rm = TRUE))*100,
     "Skośność" = skew(Avg_Daily_Usage_Hours, na.rm = TRUE),
     Kurtoza = kurtosi(Avg_Daily_Usage_Hours, na.rm = TRUE)
   )
@@ -418,3 +418,4 @@ M <- cor(dane5[, c(2, 6, 9, 10, 12, 13)])
 
 corrplot.mixed(M, order = 'AOE', upper = "circle", lower = "number", tl.col = "black", tl.pos = "lt", number.cex = 0.7)
 ```
+Najsilniejsza zależność widoczna jest w negatywnym wpływie mediów społecznościowych na zdrowie psychiczne – im wyższy wskaźnik uzależnienia oraz częstsze konflikty na tym tle, tym drastycznie niższy wynik zdrowia psychicznego. Istnieje wyraźna korelacja ujemna (-0.79) między czasem spędzanym w social mediach a długością snu, co oznacza, że intensywne korzystanie z sieci odbywa się kosztem nocnego wypoczynku. Długość snu ma silny, pozytywny wpływ na kondycję psychiczną (współczynnik 0.71), a to sugeruje, że dbanie o sen jest ważne dla dobrostanu psychicznego w kontekście cyfrowym. Wskaźniki problematycznego korzystania z sieci są ze sobą ściśle powiązane: wysoki poziom uzależnienia bardzo mocno koreluje z występowaniem konfliktów z powodu social mediów (0.93) oraz z czasem ich użytkowania (0.83). Zmienna wieku nie wykazuje istotnych powiązań z pozostałymi czynnikami (bardzo słabe korelacje, np. 0.13 czy -0.11), co sugeruje, że opisane problemy dotykają badanych niezależnie od tego, ile mają lat.
