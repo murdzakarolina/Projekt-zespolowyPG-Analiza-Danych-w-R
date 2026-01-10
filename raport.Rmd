@@ -13,6 +13,7 @@ knitr::opts_chunk$set(cache = TRUE)
 library(tidyverse)
 library(readr)
 library (naniar)
+
 dane <- read.csv("data/Students_Social_Media_Addiction.csv")
 ````
 
@@ -288,3 +289,133 @@ ggplot(dane, aes(x = social_media_avg, y = Mental_Health_Score)) +
 
 ```
 Na podstawie powyższego wykresu można stwierdzić, że istnieje negatywna korelacja między czasem spędzonym w mediach społecznościowych a zdrowiem psychicznym, przy czym najlepszy wynik zdrowia psychicznego wydaje się być w przedziale "0–2" godziny. Wzrost czasu spędzanego na platformach społecznościowych (z 2 do 8 godzin) wiąże się ze stopniowym pogorszeniem zdrowia psychicznego.Wykres sugeruje, że umiarkowane lub wysokie wykorzystanie mediów społecznościowych (od 2 do 8 godzin) jest związane zarówno z gorszym średnim zdrowiem psychicznym, jak i większą niepewnością wyników w tej grupie.
+
+# 4. Statystyki opisowe
+
+4.1 Sprawdzamy czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych
+
+```{r kable_report_clean, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+library(psych)
+library(kableExtra)
+library(knitr)
+library(tibble)
+
+#Oblcizanie statystyk opisowych: Średni czas korzystania z mediów społecznościowych wg poziomu edukacji
+statystyki <- dane %>%
+  group_by(Academic_Level) %>%
+  summarise(
+    Min = min(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    Max = max(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    "Kwartyl dolny" = quantile(Avg_Daily_Usage_Hours, 0.25, na.rm = TRUE),
+    Mediana = median(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    "Kwartyl górny" = quantile(Avg_Daily_Usage_Hours, 0.75, na.rm = TRUE),
+    "Średnia" = mean(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    "Odch. std." = sd(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    IQR = IQR(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    "Odchylenie ćwiartkowe" = IQR(Avg_Daily_Usage_Hours, na.rm = TRUE)/2,
+    "Odch. std. w %" = (sd(Avg_Daily_Usage_Hours, na.rm = TRUE)/mean(Avg_Daily_Usage_Hours, na.rm = TRUE))*100,
+    "Odch. ćwiartkowe w %" = (IQR(Avg_Daily_Usage_Hours, na.rm = TRUE)/median(Avg_Daily_Usage_Hours, na.rm = TRUE))*100,
+    "Skośność" = skew(Avg_Daily_Usage_Hours, na.rm = TRUE),
+    Kurtoza = kurtosi(Avg_Daily_Usage_Hours, na.rm = TRUE)
+  )
+
+#Transpozycja (Obracamy tabelę, żeby statystyki były w wierszach)
+# Zapisujemy nazwy grup
+nazwy_kolumn <- statystyki$Academic_Level
+
+#Obracamy samą część liczbową (bez pierwszej kolumny z nazwami grup)
+tabela_final <- t(statystyki[, -1])
+
+#Przypisujemy nazwy kolumnom (High School, Undergraduate, Graduate)
+colnames(tabela_final) <- nazwy_kolumn
+
+tabela_final %>%
+  as.data.frame() %>%
+  rownames_to_column("Statystyka") %>%
+  # Nakładam nowe nazwy na kolumny w kolejności od lewej do prawej, bo bez tego się mieszało (nazwy były w kolejności alfabetycznej)
+  setNames(c("Statystyka", "High School", "Undergraduate", "Graduate")) %>%
+  kbl(
+    caption = "Tabela 1. Średni czas korzystania z mediów społecznościowych wg poziomu edukacji.",
+    digits = 2,
+    align = "c"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive", "bordered"),
+    full_width = FALSE,
+    position = "center",
+    font_size = 14
+  ) %>%
+  add_header_above(c(" " = 1, "Poziom Edukacji" = 3), bold = TRUE, background = "#F2F2F2") %>%
+  row_spec(0, bold = TRUE, color = "white", background = "blue") %>%
+  column_spec(1, bold = TRUE, border_right = TRUE, width = "5cm") 
+```
+
+Na podstawie danych z tabeli można zauważyć, że poziom wykształcenia różnicuje intensywność korzystania z mediów społecznościowych. Najwyższy poziom aktywności wykazuje grupa Undergraduate, osiągając najwyższą średnią (5.54) oraz medianę (5.60). Osoby z wykształceniem High School korzystają z mediów najmniej intensywnie (średnia 4.78), natomiast grupa Graduate plasuje się pośrodku ze średnią 5.00. Wyniki sugerują więc, że etap studiów licencjackich sprzyja najczęstszemu korzystaniu z mediów społecznościowych w porównaniu do osób przed studiami lub z wyższym stopniem naukowym.
+
+4.2 Sprawdzamy: Czy status związku ma wpływ na ilość przespanych godzin w nocy?
+
+```{r}
+library(kableExtra)
+library(dplyr)
+
+dane %>%
+  mutate(Relationship_Status = recode(Relationship_Status, 
+                                      "Single" = "Singiel",
+                                      "In Relationship" = "W związku", 
+                                      "Complicated" = "To skomplikowane")) %>%
+  group_by(Relationship_Status) %>%
+  summarize(
+    Min = min(Sleep_Hours_Per_Night),
+    Max = max(Sleep_Hours_Per_Night),
+    Średnia = mean(Sleep_Hours_Per_Night), 
+    Odchylenie = sd(Sleep_Hours_Per_Night),
+    Mediana = median(Sleep_Hours_Per_Night),
+    Q1 = quantile(Sleep_Hours_Per_Night, 0.25),
+    Q3 = quantile(Sleep_Hours_Per_Night, 0.75),
+    Skośność = skew(Sleep_Hours_Per_Night),
+    Kurtoza = kurtosi(Sleep_Hours_Per_Night)
+  ) %>%
+  mutate(Średnia = cell_spec(round(Średnia, 2), 
+                        color = ifelse(Średnia < 6.0, "red", "green"),
+                        bold = ifelse(Średnia < 6.0, TRUE, FALSE))
+  ) %>%
+  select(Relationship_Status, Min, Max, Średnia, Odchylenie, Mediana, Q1, Q3, Skośność, Kurtoza) %>%
+  kbl(digits = 2, escape = F,
+      col.names = c("Status związku", "Min", "Max", "Średnia", "Odch. std", 
+                    "Mediana", "Q1", "Q3", "Skośność", "Kurtoza")) %>%
+  
+  kable_styling(bootstrap_options = c("bordered", "hover"), 
+                full_width = F, 
+                html_font = "Cambria") %>%
+  add_header_above(c(" " = 1, 
+                     "Zakres danych" = 2, 
+                     "Miary tendencji centralnej" = 3, 
+                     "Kwantyle" = 2, 
+                     "Kształt rozkładu" = 2), 
+                   bold = T, color = "black") %>%
+  
+  row_spec(0, bold = T, color = "white", background = "blue")
+``` 
+
+Najgorzej wypada grupa o statusie „To skomplikowane”, gdzie średnia długość snu wynosi zaledwie 5,9 godziny, co jest wynikiem znacznie niższym niż w pozostałych kategoriach. Osoby te nie tylko śpią najkrócej, ale też żadna z nich nie przekroczyła 7,4 godziny snu. „Single” śpią średnio najdłużej (6,98 h), wyprzedzając nieznacznie osoby „W związku” (6,83 h). Warto jednak zauważyć, że choć osoby w związku mają nieco niższą średnią, to ich mediana wynosi 7,0, co oznacza, że typowy przedstawiciel tej grupy śpi optymalną ilość czasu.Różnica między niepewną relacją a stabilnymi statusami jest więc wyraźna i sugeruje, że brak stabilizacji może negatywnie wpływać na regenerację. Podsumowując, osoby w ustabilizowanej sytuacji (singiel lub związek) śpią o około godzinę dłużej niż te w skomplikowanych relacjach. 
+
+4.3 Macierz korelacji
+
+```{r setup, include=FALSE}
+download.file("https://github.com/murdzakarolina/Projekt-zespolowyPG-Analiza-Danych-w-R/blob/main/data/Students_Social_Media_Addiction.csv?raw=true", destfile = "dane5.csv", mode="wb")
+dane5 <- read.csv("dane5.csv", sep=",", dec=".")
+
+
+library(corrplot)
+
+```
+
+```{r bivariate, echo=FALSE, warning=TRUE}
+corrplot(cor(dane5[, c(2, 6, 9, 10, 12, 13)]), method = "number", type = "upper", diag =FALSE)
+
+M <- cor(dane5[, c(2, 6, 9, 10, 12, 13)])
+
+corrplot.mixed(M, order = 'AOE', upper = "circle", lower = "number", tl.col = "black", tl.pos = "lt", number.cex = 0.7)
+```
+Najsilniejsza zależność widoczna jest w negatywnym wpływie mediów społecznościowych na zdrowie psychiczne – im wyższy wskaźnik uzależnienia oraz częstsze konflikty na tym tle, tym drastycznie niższy wynik zdrowia psychicznego. Istnieje wyraźna korelacja ujemna (-0.79) między czasem spędzanym w social mediach a długością snu, co oznacza, że intensywne korzystanie z sieci odbywa się kosztem nocnego wypoczynku. Długość snu ma silny, pozytywny wpływ na kondycję psychiczną (współczynnik 0.71), a to sugeruje, że dbanie o sen jest ważne dla dobrostanu psychicznego w kontekście cyfrowym. Wskaźniki problematycznego korzystania z sieci są ze sobą ściśle powiązane: wysoki poziom uzależnienia bardzo mocno koreluje z występowaniem konfliktów z powodu social mediów (0.93) oraz z czasem ich użytkowania (0.83). Zmienna wieku nie wykazuje istotnych powiązań z pozostałymi czynnikami (bardzo słabe korelacje, np. 0.13 czy -0.11), co sugeruje, że opisane problemy dotykają badanych niezależnie od tego, ile mają lat.
