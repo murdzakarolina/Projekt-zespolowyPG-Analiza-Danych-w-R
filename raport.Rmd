@@ -422,7 +422,7 @@ Najsilniejsza zależność widoczna jest w negatywnym wpływie mediów społeczn
 
 # Istotność statystyczna (0.05)
 
-library(ggstatsplot)
+```library(ggstatsplot)
 library(ggthemes)
 library(ggplot2)
 
@@ -434,6 +434,7 @@ gghistostats(
   test.value = 5, 
   title = "P1: Rozkład czasu w social mediach"
 )
+```
 
 Hipotezy: H_0: = 5; H_1: =/= 5.
 Poziom istotności: alpha = 0,05.
@@ -444,14 +445,14 @@ Decyzja: p > 0,05brak podstaw do odrzucenia H_0.
 Wnioski: Rozkład czasu spędzanego w mediach społecznościowych jest zbliżony do rozkładu normalnego ze średnią wynoszącą 4,92 h. Przeprowadzona weryfikacja hipotezy wykazała, że uzyskany wynik nie jest istotny statystycznie (p > 0,05). Oznacza to, że studenci spędzają w mediach społecznościowych średnio tyle czasu, ile zakładano w hipotezie testowej (ok. 5 godzin dziennie).
 
 2. Jaka jest najczęściej używana przez studentów platforma? 
-ggpiestats(
+```ggpiestats(
   data = dane,
   x = Most_Used_Platform,
   package = "ggthemes", 
   palette = "Tableau_20",
   title = "P2: Dominująca platforma"
 )
-
+```
 Hipotezy: H_0: Rozkład platform jest równomierny; H_1: Istnieje platforma dominująca.
 Poziom istotności: alpha = 0,05.
 Test: Test dobroci dopasowania chi^2.
@@ -462,12 +463,13 @@ Decyzja: Odrzucenie H_0.
 Wnioski: Struktura korzystania z mediów społecznościowych wśród studentów jest silnie zróżnicowana. Liderem wśród studentów jest Instagram (35%), wyprzedzając Facebooka oraz TikToka. Wynik testu statystycznego (p < 0,05) potwierdza, że różnice w popularności poszczególnych platform są istotne statystycznie. Studenci w badanej grupie istotnie preferują serwisy oparte na treściach wizualnych i krótkich formach wideo.
 
 3. Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
-ggbetweenstats(
+```ggbetweenstats(
   data = dane,
   x = Gender,
   y = Avg_Daily_Usage_Hours,
   title = "P3: Płeć a czas w social mediach"
 )
+```
 
 Hipotezy: H_0: = \mu_{K} = \mu_{M}; H_1: \mu_{K} \neq \mu_{M}
 Poziom istotności: alpha = 0,05.
@@ -479,13 +481,14 @@ Decyzja: Jeśli p < 0,05, odrzucamy H_0.
 Wnioski: Analiza wykazała, że kobiety spędzają w mediach społecznościowych średnio o około 11 minut dziennie więcej niż mężczyźni (5,01 h vs 4,83 h). Uzyskana wartość testu (p = 0,05) znajduje się na granicy przyjętego poziomu istotności, co przy uwzględnieniu bardzo małej wielkości efektu (widehat = 0,15) pozwala stwierdzić, że płeć nie jest kluczowym czynnikiem różnicującym czas spędzany w mediach społecznościowych w badanej próbie. Różnica może wynikać z błędu losowego.
 
 4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach?
-ggscatterstats(
+```ggscatterstats(
   data = dane,
   x = Avg_Daily_Usage_Hours,
   y = Sleep_Hours_Per_Night,
   type = "parametric",
   title = "P4: Korelacja: Czas użycia vs Sen"
 )
+```
 
 Wnioski: Istnieje bardzo silna i statystycznie istotna ujemna zależność między czasem spędzanym w mediach społecznościowych a długością snu (r = -0,79, p < 0,001). Wyniki sugerują, że nadmierne korzystanie z platform odbywa się kosztem odpoczynku studentów. Każda dodatkowa godzina w social mediach wiąże się z mierzalnym skróceniem czasu snu, co potwierdza hipotezę o negatywnym wpływie technologii na higienę snu.
 
@@ -502,21 +505,21 @@ ggbetweenstats(
 Wnioski: Rodzaj najczęściej używanej platformy społecznościowej ma kluczowe znaczenie dla poziomu deklarowanego uzależnienia studentów. Użytkownicy aplikacji opartych na krótkich formach wideo, takich jak TikTok i Snapchat, wykazują znacznie wyższy poziom uzależnienia w porównaniu do użytkowników innych serwisów. Statystyki Bayesowskie potwierdzają, że rodzaj medium tłumaczy aż 35% (w2p) zmienności w wynikach uzależnienia, co sugeruje, że mechanizmy angażujące konkretnych aplikacji (np. algorytmy) mogą bezpośrednio stymulować zachowania nałogowe.
 
 6. Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
-ggbetweenstats(
+```ggbetweenstats(
   data = dane,
   x = Academic_Level,
   y = Avg_Daily_Usage_Hours,
   title = "P6: Wykształcenie a czas w social mediach"
 )
-
+```
 Wnioski: Poziom wykształcenia jest czynnikiem silnie różnicującym czas spędzany w mediach społecznościowych (p < 0.001, w2p = 0.22). Najwięcej czasu w sieci spędzają osoby z wykształceniem średnim, podczas gdy absolwenci wykazują najniższą aktywność. Wyniki te sugerują, że wraz z postępem edukacyjnym i wiekiem, intensywność korzystania z mediów społecznościowych ulega istotnemu zmniejszeniu.
 
 7. Czy status związku wpływa na czas spędzany w social mediach?
-ggbetweenstats(
+```ggbetweenstats(
   data = dane,
   x = Relationship_Status,
   y = Avg_Daily_Usage_Hours,
   title = "P7: Status związku a czas w social mediach"
 )
-
+```
 Wniosek: Status związku nie ma żadnego istotnego wpływu na to, ile czasu studenci spędzają w mediach społecznościowych. Różnice między grupami są minimalne i wynikają wyłącznie z przypadku.
