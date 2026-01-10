@@ -290,7 +290,6 @@ ggplot(dane, aes(x = social_media_avg, y = Mental_Health_Score)) +
 ```
 Na podstawie powyższego wykresu można stwierdzić, że istnieje negatywna korelacja między czasem spędzonym w mediach społecznościowych a zdrowiem psychicznym, przy czym najlepszy wynik zdrowia psychicznego wydaje się być w przedziale "0–2" godziny. Wzrost czasu spędzanego na platformach społecznościowych (z 2 do 8 godzin) wiąże się ze stopniowym pogorszeniem zdrowia psychicznego.Wykres sugeruje, że umiarkowane lub wysokie wykorzystanie mediów społecznościowych (od 2 do 8 godzin) jest związane zarówno z gorszym średnim zdrowiem psychicznym, jak i większą niepewnością wyników w tej grupie.
 
-# 4. Statystyki opisowe
 # 4. Analiza opisowa
 
 4.1 Sprawdzamy czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych
@@ -403,7 +402,6 @@ Najgorzej wypada grupa o statusie „To skomplikowane”, gdzie średnia długo�
 
 4.3 Macierz korelacji
 
-```{r setup, include=FALSE}
 ```{r pobieranie_danychh, include=FALSE}
 download.file("https://github.com/murdzakarolina/Projekt-zespolowyPG-Analiza-Danych-w-R/blob/main/data/Students_Social_Media_Addiction.csv?raw=true", destfile = "dane5.csv", mode="wb")
 dane5 <- read.csv("dane5.csv", sep=",", dec=".")
