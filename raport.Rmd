@@ -7,7 +7,7 @@ output:
     highlight: kate
 ---
 
-````{r setup, include=FALSE}
+```{r setup, include=FALSE}
 ## Global options
 knitr::opts_chunk$set(cache = TRUE)
 library(tidyverse)
@@ -15,7 +15,7 @@ library(readr)
 library (naniar)
 
 dane <- read.csv("data/Students_Social_Media_Addiction.csv")
-````
+```
 
 # Wstęp
 
@@ -77,7 +77,7 @@ Poniżej znajduje się opis najważniejszych zmiennych w zbiorze danych:
 
 # 1. Porządkowanie i czyszczenie danych
 
-# 1.1 Braki danych
+## 1.1 Braki danych
 
 ```{r}
 procent <- prop_complete_var(dane) *100
@@ -420,38 +420,48 @@ corrplot.mixed(M, order = 'AOE', upper = "circle", lower = "number", tl.col = "b
 ```
 Najsilniejsza zależność widoczna jest w negatywnym wpływie mediów społecznościowych na zdrowie psychiczne – im wyższy wskaźnik uzależnienia oraz częstsze konflikty na tym tle, tym drastycznie niższy wynik zdrowia psychicznego. Istnieje wyraźna korelacja ujemna (-0.79) między czasem spędzanym w social mediach a długością snu, co oznacza, że intensywne korzystanie z sieci odbywa się kosztem nocnego wypoczynku. Długość snu ma silny, pozytywny wpływ na kondycję psychiczną (współczynnik 0.71), a to sugeruje, że dbanie o sen jest ważne dla dobrostanu psychicznego w kontekście cyfrowym. Wskaźniki problematycznego korzystania z sieci są ze sobą ściśle powiązane: wysoki poziom uzależnienia bardzo mocno koreluje z występowaniem konfliktów z powodu social mediów (0.93) oraz z czasem ich użytkowania (0.83). Zmienna wieku nie wykazuje istotnych powiązań z pozostałymi czynnikami (bardzo słabe korelacje, np. 0.13 czy -0.11), co sugeruje, że opisane problemy dotykają badanych niezależnie od tego, ile mają lat.
 
-#5. Istotność statystyczna (0.05)
+# 5. Istotność statystyczna 
 
-```library(ggstatsplot)
-library(ggthemes)
+**Definicja**
+
+> Istotność statystyczna pozwala na określenie z jakim prawdopodobieństwem otrzymany wynik odzwierciedla rzeczywistą sytuację w populacji. Poziom istotność przyjęliśmy 0.05, co oznacza akceptację na 5% ryzyko popełnienia błędu I rodzaju.
+
+```{r sekcja5_start_final, echo=TRUE, message=FALSE, warning=FALSE}
+# 1. Reset ustawień graficznych
+try(graphics.off(), silent = TRUE)
+
+library(ggstatsplot)
 library(ggplot2)
 
-1. Jaki jest średni czas jaki studenci spędzają dziennie na używanie social mediów?
-gghistostats(
-  data = dane,
-  x = Avg_Daily_Usage_Hours,
-  test.value = 5, # Przykładowa wartość testowa
-  test.value = 5, 
-  title = "P1: Rozkład czasu w social mediach"
-)
+# 2. Pobieranie danych 
+url_pliku <- "(https://github.com/murdzakarolina/Projekt-zespolowyPG-Analiza-Danych-w-R/blob/main/data/Students_Social_Media_Addiction.csv?raw=true)"
+
+if(!file.exists("dane5.csv")) {
+   download.file(url_pliku, destfile = "dane5.csv", mode="wb")
+}
+
+# 3. Wczytanie danych
+dane5 <- read.csv("dane5.csv", sep=",", dec=".")
 ```
 
+1. Jaki jest średni czas jaki studenci spędzają dziennie na używanie social mediów?
+
+```{r, echo=TRUE, message=FALSE, error=TRUE}
+gghistostats(data = dane5, x = Avg_Daily_Usage_Hours, test.value = 5, title = "P1: Rozkład czasu w social mediach")
+```
 Hipotezy: H_0: = 5; H_1: =/= 5.
 Poziom istotności: alpha = 0,05.
 Test: Test t dla jednej próby (t-Student).
 Wynik: t_Student(704) = -1,72, p = 0,09.Wielkość efektu: = -0,06.
 Decyzja: p > 0,05brak podstaw do odrzucenia H_0.
 
-Wnioski: Rozkład czasu spędzanego w mediach społecznościowych jest zbliżony do rozkładu normalnego ze średnią wynoszącą 4,92 h. Przeprowadzona weryfikacja hipotezy wykazała, że uzyskany wynik nie jest istotny statystycznie (p > 0,05). Oznacza to, że studenci spędzają w mediach społecznościowych średnio tyle czasu, ile zakładano w hipotezie testowej (ok. 5 godzin dziennie).
+## Wnioski
+Rozkład czasu spędzanego w mediach społecznościowych jest zbliżony do rozkładu normalnego ze średnią wynoszącą 4,92 h. Przeprowadzona weryfikacja hipotezy wykazała, że uzyskany wynik nie jest istotny statystycznie (p > 0,05). Oznacza to, że studenci spędzają w mediach społecznościowych średnio tyle czasu, ile zakładano w hipotezie testowej (ok. 5 godzin dziennie).
 
 2. Jaka jest najczęściej używana przez studentów platforma? 
-```ggpiestats(
-  data = dane,
-  x = Most_Used_Platform,
-  package = "ggthemes", 
-  palette = "Tableau_20",
-  title = "P2: Dominująca platforma"
-)
+
+```{r}
+ggpiestats(data = dane5, x = Most_Used_Platform, package = "ggthemes", palette = "Tableau_20", title = "P2: Dominująca platforma")
 ```
 Hipotezy: H_0: Rozkład platform jest równomierny; H_1: Istnieje platforma dominująca.
 Poziom istotności: alpha = 0,05.
@@ -460,66 +470,89 @@ Wynik: Analiza struktury wykazuje istotne zróżnicowanie (p < 0,05).
 Wielkość efektu: VCramer.
 Decyzja: Odrzucenie H_0.
 
-Wnioski: Struktura korzystania z mediów społecznościowych wśród studentów jest silnie zróżnicowana. Liderem wśród studentów jest Instagram (35%), wyprzedzając Facebooka oraz TikToka. Wynik testu statystycznego (p < 0,05) potwierdza, że różnice w popularności poszczególnych platform są istotne statystycznie. Studenci w badanej grupie istotnie preferują serwisy oparte na treściach wizualnych i krótkich formach wideo.
+## Wnioski
+
+Struktura korzystania z mediów społecznościowych wśród studentów jest silnie zróżnicowana. Liderem wśród studentów jest Instagram (35%), wyprzedzając Facebooka oraz TikToka. Wynik testu statystycznego (p < 0,05) potwierdza, że różnice w popularności poszczególnych platform są istotne statystycznie. Studenci w badanej grupie istotnie preferują serwisy oparte na treściach wizualnych i krótkich formach wideo.
 
 3. Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
-```ggbetweenstats(
-  data = dane,
-  x = Gender,
-  y = Avg_Daily_Usage_Hours,
-  title = "P3: Płeć a czas w social mediach"
-)
+
+```{r}
+ggbetweenstats(data = dane, x = Gender, y = Avg_Daily_Usage_Hours, title = "P3: Płeć a czas w social mediach")
 ```
 
-Hipotezy: H_0: = \mu_{K} = \mu_{M}; H_1: \mu_{K} \neq \mu_{M}
+Hipotezy: H_0: = mu_{K} = mu_{M}; H_1: mu_{K} neq mu_{M}
 Poziom istotności: alpha = 0,05.
 Test: Test t dla prób niezależnych.
 Wynik: Wartość t i p z wykresu ggbetweenstats.
 Wielkość efektu: Hedges.
 Decyzja: Jeśli p < 0,05, odrzucamy H_0.
 
-Wnioski: Analiza wykazała, że kobiety spędzają w mediach społecznościowych średnio o około 11 minut dziennie więcej niż mężczyźni (5,01 h vs 4,83 h). Uzyskana wartość testu (p = 0,05) znajduje się na granicy przyjętego poziomu istotności, co przy uwzględnieniu bardzo małej wielkości efektu (widehat = 0,15) pozwala stwierdzić, że płeć nie jest kluczowym czynnikiem różnicującym czas spędzany w mediach społecznościowych w badanej próbie. Różnica może wynikać z błędu losowego.
+## Wnioski
+
+Analiza wykazała, że kobiety spędzają w mediach społecznościowych średnio o około 11 minut dziennie więcej niż mężczyźni (5,01 h vs 4,83 h). Uzyskana wartość testu (p = 0,05) znajduje się na granicy przyjętego poziomu istotności, co przy uwzględnieniu bardzo małej wielkości efektu (widehat = 0,15) pozwala stwierdzić, że płeć nie jest kluczowym czynnikiem różnicującym czas spędzany w mediach społecznościowych w badanej próbie. Różnica może wynikać z błędu losowego.
 
 4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach?
-```ggscatterstats(
-  data = dane,
-  x = Avg_Daily_Usage_Hours,
-  y = Sleep_Hours_Per_Night,
-  type = "parametric",
-  title = "P4: Korelacja: Czas użycia vs Sen"
-)
+
+```{r}
+ggscatterstats(data = dane, x = Avg_Daily_Usage_Hours, y = Sleep_Hours_Per_Night, type = "parametric", title = "P4: Korelacja: Czas użycia vs Sen")
 ```
 
-Wnioski: Istnieje bardzo silna i statystycznie istotna ujemna zależność między czasem spędzanym w mediach społecznościowych a długością snu (r = -0,79, p < 0,001). Wyniki sugerują, że nadmierne korzystanie z platform odbywa się kosztem odpoczynku studentów. Każda dodatkowa godzina w social mediach wiąże się z mierzalnym skróceniem czasu snu, co potwierdza hipotezę o negatywnym wpływie technologii na higienę snu.
+Hipotezy: H_0: p = 0 (brak korelacji); H_1: =p =/= 0 (istnieje istotna korelacja)
+Poziom istotności: alpha = 0,05.
+Test: Test korelacji Pearsona.
+Wynik: Wartość r (współczynnik korelacji) i p z wykresu ggscatterstats.
+Wielkość efektu: r Pearsona (siła korelacji).
+Decyzja: Jeśli p < 0,05, odrzucamy H_0 (związek jest istotny statystycznie).
+
+## Wnioski
+
+Istnieje bardzo silna i statystycznie istotna ujemna zależność między czasem spędzanym w mediach społecznościowych a długością snu (r = -0,79, p < 0,001). Wyniki sugerują, że nadmierne korzystanie z platform odbywa się kosztem odpoczynku studentów. Każda dodatkowa godzina w social mediach wiąże się z mierzalnym skróceniem czasu snu, co potwierdza hipotezę o negatywnym wpływie technologii na higienę snu.
 
 5. Jakie platformy społecznościowe najczęściej powodują objawy uzależnienia? 
-ggbetweenstats(
-  data = dane,
-  x = Most_Used_Platform,
-  y = Addicted_Score,
-  package = "ggthemes", 
-  palette = "Tableau_20",
-  title = "P5: Platforma a poziom uzależnienia"
-)
 
-Wnioski: Rodzaj najczęściej używanej platformy społecznościowej ma kluczowe znaczenie dla poziomu deklarowanego uzależnienia studentów. Użytkownicy aplikacji opartych na krótkich formach wideo, takich jak TikTok i Snapchat, wykazują znacznie wyższy poziom uzależnienia w porównaniu do użytkowników innych serwisów. Statystyki Bayesowskie potwierdzają, że rodzaj medium tłumaczy aż 35% (w2p) zmienności w wynikach uzależnienia, co sugeruje, że mechanizmy angażujące konkretnych aplikacji (np. algorytmy) mogą bezpośrednio stymulować zachowania nałogowe.
+```{r}
+ggbetweenstats(data = dane, x = Most_Used_Platform, y = Addicted_Score, package = "ggthemes", palette = "Tableau_20", title = "P5: Platforma a poziom uzależnienia")
+```
+
+Hipotezy: H_0: mu_{1} = mu_{2} = ... = mu_{k} (średnie wyniki uzależnienia są równe dla wszystkich platform); H_1: Przynajmniej jedna średnia różni się od pozostałych.
+Poziom istotności: alpha = 0,05.
+Test: Jednoczynnikowa analiza wariancji (One-way ANOVA).
+Wynik: Wartość statystyki F i p z wykresu ggbetweenstats.
+Wielkość efektu: omega^2 (Omega-kwadrat) lub eta^2 (Eta-kwadrat).
+Decyzja: Jeśli p < 0,05, odrzucamy H_0 (rodzaj platformy ma wpływ na poziom uzależnienia).
+
+## Wnioski
+
+Rodzaj najczęściej używanej platformy społecznościowej ma kluczowe znaczenie dla poziomu deklarowanego uzależnienia studentów. Użytkownicy aplikacji opartych na krótkich formach wideo, takich jak TikTok i Snapchat, wykazują znacznie wyższy poziom uzależnienia w porównaniu do użytkowników innych serwisów. Statystyki Bayesowskie potwierdzają, że rodzaj medium tłumaczy aż 35% (w2p) zmienności w wynikach uzależnienia, co sugeruje, że mechanizmy angażujące konkretnych aplikacji (np. algorytmy) mogą bezpośrednio stymulować zachowania nałogowe.
 
 6. Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
-```ggbetweenstats(
-  data = dane,
-  x = Academic_Level,
-  y = Avg_Daily_Usage_Hours,
-  title = "P6: Wykształcenie a czas w social mediach"
-)
+
+```{r}
+ggbetweenstats(data = dane, x = Academic_Level, y = Avg_Daily_Usage_Hours, title = "P6: Wykształcenie a czas w social mediach")
 ```
-Wnioski: Poziom wykształcenia jest czynnikiem silnie różnicującym czas spędzany w mediach społecznościowych (p < 0.001, w2p = 0.22). Najwięcej czasu w sieci spędzają osoby z wykształceniem średnim, podczas gdy absolwenci wykazują najniższą aktywność. Wyniki te sugerują, że wraz z postępem edukacyjnym i wiekiem, intensywność korzystania z mediów społecznościowych ulega istotnemu zmniejszeniu.
+Hipotezy: H_0: mu_{HighSchool} = mu_{Undergrad} = mu_{Grad} (średni czas jest taki sam dla każdego wykształcenia); H_1: Przynajmniej jedna grupa różni się średnim czasem.
+Poziom istotności: alpha = 0,05.
+Test: Jednoczynnikowa analiza wariancji (One-way ANOVA).
+Wynik: Wartość statystyki F i p z wykresu ggbetweenstats.
+Wielkość efektu: omega^2 (Omega-kwadrat).
+Decyzja: Jeśli p < 0,05, odrzucamy H_0.
+
+## Wnioski 
+
+Poziom wykształcenia jest czynnikiem silnie różnicującym czas spędzany w mediach społecznościowych (p < 0.001, w2p = 0.22). Najwięcej czasu w sieci spędzają osoby z wykształceniem średnim, podczas gdy absolwenci wykazują najniższą aktywność. Wyniki te sugerują, że wraz z postępem edukacyjnym i wiekiem, intensywność korzystania z mediów społecznościowych ulega istotnemu zmniejszeniu.
 
 7. Czy status związku wpływa na czas spędzany w social mediach?
-```ggbetweenstats(
-  data = dane,
-  x = Relationship_Status,
-  y = Avg_Daily_Usage_Hours,
-  title = "P7: Status związku a czas w social mediach"
-)
+
+```{r}
+ggbetweenstats(data = dane, x = Relationship_Status, y = Avg_Daily_Usage_Hours, title = "P7: Status związku a czas w social mediach")
 ```
-Wniosek: Status związku nie ma żadnego istotnego wpływu na to, ile czasu studenci spędzają w mediach społecznościowych. Różnice między grupami są minimalne i wynikają wyłącznie z przypadku.
+Hipotezy: H_0: mu_{Single} = mu_{InRel} = mu_{Complicated} (status związku nie różnicuje czasu spędzanego w mediach); H_1: Przynajmniej jedna średnia jest inna.
+Poziom istotności: alpha = 0,05.
+Test: Jednoczynnikowa analiza wariancji (One-way ANOVA).
+Wynik: Wartość statystyki F i p z wykresu ggbetweenstats.
+Wielkość efektu: omega^2 (Omega-kwadrat).
+Decyzja: Jeśli p < 0,05, odrzucamy H_0.
+
+## Wnioski
+
+Status związku nie ma żadnego istotnego wpływu na to, ile czasu studenci spędzają w mediach społecznościowych. Różnice między grupami są minimalne i wynikają wyłącznie z przypadku.
