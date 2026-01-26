@@ -8,7 +8,7 @@ output:
     highlight: kate
     sections: true
 ---
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE, include=FALSE}
 ## Global options
 knitr::opts_chunk$set(cache = FALSE)
 library(tidyverse)
@@ -85,14 +85,14 @@ Tu zajmiemy się przygotowaniem danych.
 
 Dane należy odpowiednio przygotować.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 procent <- prop_complete_var(dane) *100
 
 ```
 
 W danych znajduje się `r procent` % kompletnych wartości.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 naniar::vis_miss(dane)
 ```
 
@@ -100,11 +100,11 @@ naniar::vis_miss(dane)
 
 Badamy wzorzec danych.
 
-```{r, results='hide'}
+```{r, echo=FALSE, results='hide'}
 library(finalfit)
 ```
 
-```{r, fig.height=6, fig.width=10}
+```{r, echo=FALSE, fig.height=6, fig.width=10}
 # Dodajemy wymiary wykresu, żeby R wiedział jak go skalować w HTML
 VIM::aggr(dane, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, 
           labels=names(dane), cex.axis=.7, gap=3, 
@@ -113,17 +113,17 @@ VIM::aggr(dane, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
 
 Badamy wzorzec danych.
 
-```{r}
+```{r echo=FALSE}
 library(finalfit)
 missing_pattern(dane)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 VIM::aggr(dane, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(dane), cex.axis=.7, gap=3, ylab=c("Procent braków danych","Wzorzec braków danych"))
 ```
 
 
-```{r}
+```{r echo=FALSE}
 library(ggplot2)
 ggplot(data = dane) + 
   geom_miss_point(aes(x = Avg_Daily_Usage_Hours , y = Sleep_Hours_Per_Night))
@@ -134,7 +134,7 @@ ggplot(data = dane) +
 
 Imputacja metodą hotdeck
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(VIM)
 Dane_imp <- hotdeck(dane)
 naniar::vis_miss(Dane_imp)
@@ -162,7 +162,7 @@ Reguły, które muszą spełnić nasze dane:
 10. Wynik wpływu na wyniki akademickie to "Yes" lub "No"
 11. Wynik konfliktu z social mediami to "0", "1", "2", "3", "4", "5"
 
-```{r}
+```{r echo=FALSE}
 library(validate)
 
 table(dane$Most_Used_Platform)
@@ -188,7 +188,7 @@ rules <- validator(
 Czy zbiór danych spełnia te reguły? 
 Upewniamy się za pomocą funkcji confront
 
-```{r}
+```{r echo=FALSE}
 cf <- confront(dane, rules, key="Student_ID")
 summary(cf)
 plot(cf, main="dane")
@@ -197,7 +197,7 @@ plot(cf, main="dane")
 
 W naszym zbiorze danych nie ma żadnego konfliktu; 100% reguł jest spełnione, teraz sprawdzamy kompletność danych z pakietem vis_miss   
 
-```{r}
+```{r echo=FALSE}
 vis_miss(dane) 
 vis_miss(dane, cluster = TRUE) #Wizualizujemy z grupowaniem kolumn i wierszy o podobnym wzorcu braków
 n_miss(dane) #Sprawdzamy liczbę braków w całym zbiorze
@@ -217,7 +217,7 @@ w zależności od krajów.
 
 3.1 Sprawdzamy jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media? 
 
-```{r}
+```{r echo=FALSE}
 # Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach social media i czy wpływa to na wynik akademicki? 
 
 # wykres kropkowy z linią trendu 
@@ -250,7 +250,7 @@ Na podstawie drugiego wykresu można zauważyć ujemną korelację średniej cza
 
 3.2 Sprawdzamy czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
 
-```{r}
+```{r echo=FALSE}
 # Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
 
 ggplot(dane, aes( y = social_media_avg, fill = Academic_Level)) +
@@ -274,7 +274,7 @@ Na podstawie powyższego wykresu można stwierdzić, że średni czas korzystani
 
 3.3 Sprawdzamy jaki jest średni czas spędzany w social mediach w zależności od narodowości?
 
-```{r}
+```{r echo=FALSE}
 # Jaki jest średni czas spędzany w social mediach w zależności od narodowości?
 
 library(maps)
@@ -302,7 +302,7 @@ w social mediach") +
 
 3.4 Sprawdzamy czy zdrowie psychiczne zależy od czasu spędzonego w mediach społecznościowych 
 
-```{r}
+```{r echo=FALSE}
 ggplot(dane, aes(x = social_media_avg, y = Mental_Health_Score)) +
   geom_boxplot()  +
   labs(
@@ -385,7 +385,7 @@ Na podstawie danych z tabeli można zauważyć, że poziom wykształcenia różn
 
 4.2 Sprawdzamy: Czy status związku ma wpływ na ilość przespanych godzin w nocy?
 
-```{r}
+```{r echo=FALSE}
 dane %>%
 mutate(Relationship_Status = recode(Relationship_Status, 
                                       "Single" = "Singiel",
@@ -427,9 +427,9 @@ row_spec(0, bold = T, color = "white", background = "blue")
 
 Najgorzej wypada grupa o statusie „To skomplikowane”, gdzie średnia długość snu wynosi zaledwie 5,9 godziny, co jest wynikiem znacznie niższym niż w pozostałych kategoriach. Osoby te nie tylko śpią najkrócej, ale też żadna z nich nie przekroczyła 7,4 godziny snu. „Single” śpią średnio najdłużej (6,98 h), wyprzedzając nieznacznie osoby „W związku” (6,83 h). Warto jednak zauważyć, że choć osoby w związku mają nieco niższą średnią, to ich mediana wynosi 7,0, co oznacza, że typowy przedstawiciel tej grupy śpi optymalną ilość czasu.Różnica między niepewną relacją a stabilnymi statusami jest więc wyraźna i sugeruje, że brak stabilizacji może negatywnie wpływać na regenerację. Podsumowując, osoby w ustabilizowanej sytuacji (singiel lub związek) śpią o około godzinę dłużej niż te w skomplikowanych relacjach. 
 
-4.3 Macierz korelacji
+4.3 Macierz korelacji 
 
-```{r}
+```{r echo=FALSE}
 
 library(corrplot)
 
@@ -451,18 +451,18 @@ Najsilniejsza zależność widoczna jest w negatywnym wpływie mediów społeczn
 
 > Istotność statystyczna pozwala na określenie z jakim prawdopodobieństwem otrzymany wynik odzwierciedla rzeczywistą sytuację w populacji. Poziom istotność przyjęliśmy 0.05, co oznacza akceptację na 5% ryzyko popełnienia błędu I rodzaju.
 
-```{r}
+```{r echo=FALSE}
 library(ggstatsplot)
 library(ggplot2)
 ```
 
 1. Jaki jest średni czas jaki studenci spędzają dziennie na używanie social mediów?
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 gghistostats(data = dane, x = Avg_Daily_Usage_Hours, test.value = 5, title = "P1: Rozkład czasu w social mediach")
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Hipotezy: H_0: = 5; H_1: =/= 5.
 # Poziom istotności: alpha = 0,05.
 # Test: Test t dla jednej próby (t-Student).
@@ -474,11 +474,11 @@ Rozkład czasu spędzanego w mediach społecznościowych jest zbliżony do rozk�
 
 2. Jaka jest najczęściej używana przez studentów platforma? 
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggpiestats(data = dane, x = Most_Used_Platform, package = "ggthemes", palette = "Tableau_20", title = "P2: Dominująca platforma")
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Hipotezy: H_0: = 5; H_1: =/= 5.
 # Poziom istotności: alpha = 0,05.
 # Test: Test dobroci dopasowania chi^2.
@@ -491,7 +491,7 @@ Struktura korzystania z mediów społecznościowych wśród studentów jest siln
 
 3. Jakie są różnice w czasie spędzanym na platformach social media w zależności od płci?
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggbetweenstats(data = dane, x = Gender, y = Avg_Daily_Usage_Hours, title = "P3: Płeć a czas w social mediach")
 ```
 
@@ -508,11 +508,11 @@ Analiza wykazała, że kobiety spędzają w mediach społecznościowych średnio
 
 4. Jaki jest średni czas snu w zależności od średniego czasu spędzanego na platformach?
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggscatterstats(data = dane, x = Avg_Daily_Usage_Hours, y = Sleep_Hours_Per_Night, type = "parametric", title = "P4: Korelacja: Czas użycia vs Sen")
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Hipotezy: H_0: p = 0 (brak korelacji); H_1: =p =/= 0 (istnieje istotna korelacja)
 # Poziom istotności: alpha = 0,05.
 # Test: Test korelacji Pearsona.
@@ -524,11 +524,11 @@ Istnieje bardzo silna i statystycznie istotna ujemna zależność między czasem
 
 5. Jakie platformy społecznościowe najczęściej powodują objawy uzależnienia? 
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggbetweenstats(data = dane, x = Most_Used_Platform, y = Addicted_Score, package = "ggthemes", palette = "Tableau_20", title = "P5: Platforma a poziom uzależnienia")
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Hipotezy: H_0: mu_{1} = mu_{2} = ... = mu_{k} (średnie wyniki uzależnienia są równe dla wszystkich platform); H_1: Przynajmniej jedna średnia różni się od pozostałych.
 # Poziom istotności: alpha = 0,05.
 # Test: Jednoczynnikowa analiza wariancji (One-way ANOVA).
@@ -541,11 +541,11 @@ Rodzaj najczęściej używanej platformy społecznościowej ma kluczowe znaczeni
 
 6. Czy poziom wykształcenia wpływa na intensywność używania mediów społecznościowych?
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggbetweenstats(data = dane, x = Academic_Level, y = Avg_Daily_Usage_Hours, title = "P6: Wykształcenie a czas w social mediach")
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Hipotezy: H_0: mu_{HighSchool} = mu_{Undergrad} = mu_{Grad} (średni czas jest taki sam dla każdego wykształcenia); H_1: Przynajmniej jedna grupa różni się średnim czasem.
 # Poziom istotności: alpha = 0,05.
 # Test: Jednoczynnikowa analiza wariancji (One-way ANOVA).
@@ -558,11 +558,11 @@ Poziom wykształcenia jest czynnikiem silnie różnicującym czas spędzany w me
 
 7. Czy status związku wpływa na czas spędzany w social mediach?
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggbetweenstats(data = dane, x = Relationship_Status, y = Avg_Daily_Usage_Hours, title = "P7: Status związku a czas w social mediach")
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Hipotezy: H_0: mu_{Single} = mu_{InRel} = mu_{Complicated} (status związku nie różnicuje czasu spędzanego w mediach); H_1: Przynajmniej jedna średnia jest inna.
 # Poziom istotności: alpha = 0,05.
 # Test: Jednoczynnikowa analiza wariancji (One-way ANOVA).
